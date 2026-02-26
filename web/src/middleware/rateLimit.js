@@ -5,6 +5,7 @@ const apiLimiter = rateLimit({
     max: 200,
     standardHeaders: true,
     legacyHeaders: false,
+    validate: false,
     message: {
         error: 'Too many requests. Please try again later.',
         retryAfter: '15 minutes'
@@ -16,6 +17,7 @@ const authLimiter = rateLimit({
     max: 20,
     standardHeaders: true,
     legacyHeaders: false,
+    validate: false,
     message: {
         error: 'Too many authentication attempts. Please try again later.',
         retryAfter: '15 minutes'
