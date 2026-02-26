@@ -101,7 +101,7 @@ async function startServer() {
 
         // Seed admin password hash (non-fatal if it fails)
         try {
-            const bcrypt = require('bcrypt');
+            const bcrypt = require('bcryptjs');
             const adminEmail = 'admin@deploylite.io';
             const adminPassword = 'D3pl0y!Admin2024';
             const { rows } = await pool.query(
