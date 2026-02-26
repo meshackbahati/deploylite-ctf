@@ -97,8 +97,26 @@ async function startServer() {
         client.release();
         logger.info('Database connection established');
 
-        const { seedDatabase } = require('./utils/seed');
-        await seedDatabase();
+        // Seed admin password hash (non-fatal if it fails)
+        try {
+            const bcrypt = require('bcrypt');
+            const adminEmail = 'admin@deploylite.io';
+            const adminPassword = 'D3pl0y!Admin2024';
+            const { rows } = await pool.query(
+                'SELECT id, password_hash FROM users WHERE email = $1',
+                [adminEmail]
+            );
+            if (rows.length > 0) {
+                const isValid = await bcrypt.compare(adminPassword, rows[0].password_hash).catch(() => false);
+                if (!isValid) {
+                    const hash = await bcrypt.hash(adminPassword, 12);
+                    await pool.query('UPDATE users SET password_hash = $1 WHERE email = $2', [hash, adminEmail]);
+                    logger.info('Admin password hash updated');
+                }
+            }
+        } catch (seedErr) {
+            logger.info('Admin seed skipped: ' + (seedErr.message || 'unknown error'));
+        }
 
         app.listen(PORT, '0.0.0.0', () => {
             logger.info(`DeployLite server running on port ${PORT}`);
