@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeployLite — Ship Faster, Deploy Smarter</title>
+    <meta name="description" content="The modern deployment platform for development teams. Push code, run builds, and ship globally in seconds.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 600px;
+            background: radial-gradient(ellipse at center, rgba(99,102,241,0.15) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .hero { position: relative; z-index: 1; }
+        .trusted-by {
+            text-align: center;
+            padding: 3rem 0;
+            color: var(--text-muted);
+            font-size: 0.8125rem;
+        }
+        .trusted-logos {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 1rem;
+            opacity: 0.4;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        .pricing-section { padding: 4rem 0; }
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .pricing-card { text-align: center; padding: 2.5rem 2rem; }
+        .pricing-card .price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: 1rem 0;
+        }
+        .pricing-card .price span { font-size: 1rem; font-weight: 400; color: var(--text-muted); }
+        .pricing-card ul {
+            list-style: none;
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+        .pricing-card ul li {
+            padding: 0.375rem 0;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        .pricing-card ul li::before {
+            content: "✓ ";
+            color: var(--success);
+            font-weight: 600;
+        }
+        .pricing-card.featured {
+            border-color: var(--accent);
+            box-shadow: 0 0 40px var(--accent-glow);
+        }
+    </style>
+</head>
+<body>
+    <div class="hero-bg"></div>
+    <div class="container">
+        <nav class="nav">
+            <a href="/" class="nav-brand">
+                <svg viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="url(#g)"/><path d="M8 14l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="g" x1="0" y1="0" x2="28" y2="28"><stop stop-color="#6366f1"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs></svg>
+                DeployLite
+            </a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#pricing">Pricing</a>
+                <a href="https://docs.deploylite.io" target="_blank">Docs</a>
+                <a href="/login" class="btn btn-secondary btn-sm">Sign In</a>
+                <a href="/register" class="btn btn-primary btn-sm">Get Started</a>
+            </div>
+        </nav>
+
+        <section class="hero fade-in">
+            <h1>Ship faster.<br>Deploy smarter.</h1>
+            <p>The modern deployment platform for development teams. Push your code, run builds, and ship globally — all in seconds.</p>
+            <div class="hero-actions">
+                <a href="/register" class="btn btn-primary btn-lg">Start Building Free →</a>
+                <a href="#features" class="btn btn-secondary btn-lg">See How It Works</a>
+            </div>
+        </section>
+
+        <div class="trusted-by">
+            Trusted by 2,400+ teams worldwide
+            <div class="trusted-logos">
+                <span>Acme Corp</span>
+                <span>Synthwave</span>
+                <span>NovaTech</span>
+                <span>Quantum</span>
+                <span>Meridian</span>
+            </div>
+        </div>
+
+        <section id="features">
+            <div style="text-align:center;margin-bottom:1rem">
+                <h2 style="font-size:2rem;font-weight:700">Everything you need to deploy</h2>
+                <p style="color:var(--text-secondary);max-width:500px;margin:0.5rem auto">From git push to production in under 60 seconds. No configuration required.</p>
+            </div>
+            <div class="features-grid">
+                <div class="card feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Instant Builds</h3>
+                    <p>Push to any branch and get a preview deployment in seconds. Automatic rollbacks on failure.</p>
+                </div>
+                <div class="card feature-card">
+                    <div class="feature-icon">🌍</div>
+                    <h3>Global Edge Network</h3>
+                    <p>Deploy to 42 edge locations worldwide. Sub-20ms latency for your users everywhere.</p>
+                </div>
+                <div class="card feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Enterprise Security</h3>
+                    <p>SOC2 compliant. Encrypted builds, isolated runners, and role-based access controls.</p>
+                </div>
+                <div class="card feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Real-time Analytics</h3>
+                    <p>Monitor build performance, deployment frequency, and error rates in real-time.</p>
+                </div>
+                <div class="card feature-card">
+                    <div class="feature-icon">🔗</div>
+                    <h3>Preview Links</h3>
+                    <p>Share unique preview URLs for every pull request. Get feedback before merging.</p>
+                </div>
+                <div class="card feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>CI/CD Pipeline</h3>
+                    <p>Built-in continuous integration with custom build scripts, caching, and parallel jobs.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="pricing" class="pricing-section">
+            <div style="text-align:center;margin-bottom:1rem">
+                <h2 style="font-size:2rem;font-weight:700">Simple, transparent pricing</h2>
+                <p style="color:var(--text-secondary)">Start free. Scale as you grow.</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="card pricing-card">
+                    <h3>Hobby</h3>
+                    <div class="price">$0<span>/mo</span></div>
+                    <ul>
+                        <li>3 projects</li>
+                        <li>100 builds/month</li>
+                        <li>1 GB bandwidth</li>
+                        <li>Community support</li>
+                    </ul>
+                    <a href="/register" class="btn btn-secondary" style="width:100%;justify-content:center">Get Started</a>
+                </div>
+                <div class="card pricing-card featured">
+                    <h3>Pro</h3>
+                    <div class="price">$20<span>/mo</span></div>
+                    <ul>
+                        <li>Unlimited projects</li>
+                        <li>1,000 builds/month</li>
+                        <li>100 GB bandwidth</li>
+                        <li>Priority support</li>
+                        <li>Custom domains</li>
+                        <li>Team collaboration</li>
+                    </ul>
+                    <a href="/register" class="btn btn-primary" style="width:100%;justify-content:center">Start Pro Trial</a>
+                </div>
+                <div class="card pricing-card">
+                    <h3>Enterprise</h3>
+                    <div class="price">Custom</div>
+                    <ul>
+                        <li>Everything in Pro</li>
+                        <li>Unlimited builds</li>
+                        <li>Dedicated runners</li>
+                        <li>SSO & SAML</li>
+                        <li>SLA guarantee</li>
+                        <li>Dedicated support</li>
+                    </ul>
+                    <a href="mailto:sales@deploylite.io" class="btn btn-secondary" style="width:100%;justify-content:center">Contact Sales</a>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p>© 2024 DeployLite Inc. All rights reserved. &nbsp;|&nbsp; <a href="#">Privacy</a> &nbsp;|&nbsp; <a href="#">Terms</a> &nbsp;|&nbsp; <a href="#">Status</a></p>
+        </footer>
+    </div>
+</body>
+</html>

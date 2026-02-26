@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile — DeployLite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <nav class="nav">
+            <a href="/dashboard" class="nav-brand">
+                <svg viewBox="0 0 28 28" fill="none">
+                    <rect width="28" height="28" rx="6" fill="url(#g)" />
+                    <path d="M8 14l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <defs>
+                        <linearGradient id="g" x1="0" y1="0" x2="28" y2="28">
+                            <stop stop-color="#6366f1" />
+                            <stop offset="1" stop-color="#a855f7" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                DeployLite
+            </a>
+            <div class="nav-links">
+                <a href="/dashboard">Dashboard</a>
+                <a href="/profile" class="active">Profile</a>
+                <a href="/admin" class="nav-admin-link" style="display:none">Admin</a>
+            </div>
+            <div class="nav-user"></div>
+        </nav>
+
+        <div class="page-header">
+            <h1>Profile Settings</h1>
+        </div>
+
+        <div class="card fade-in" style="max-width:640px">
+            <div id="profileAlert" class="alert"></div>
+
+            <div id="profileContent">
+                <div class="loading">Loading profile...</div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>© 2024 DeployLite Inc.</p>
+        </footer>
+    </div>
+
+    <script src="/js/common.js"></script>
+    <script>
+        let currentUser = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            currentUser = await requireAuth();
+            if (!currentUser) return;
+            setupNav(currentUser);
+            loadProfile();
+        });
+
+        async function loadProfile() {
+            try {
+                const data = await apiRequest('/users/profile');
+                const user = data.user;
+
+                document.getElementById('profileContent').innerHTML = `
+                    <div style="display:flex;align-items:center;gap:1.5rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border-color)">
+                        <div class="avatar" style="width:64px;height:64px;font-size:1.25rem">${getInitials(user.username)}</div>
+                        <div>
+                            <h2 style="font-size:1.25rem">${escapeHtml(user.username)}</h2>
+                            <p style="color:var(--text-muted);font-size:0.875rem">${escapeHtml(user.email)}</p>
+                            <span class="badge badge-${user.role === 'admin' ? 'warning' : 'info'}" style="margin-top:0.25rem">${user.role}</span>
+                        </div>
+                    </div>
+
+                    <form id="profileForm">
+                        <div class="input-group">
+                            <label for="pUsername">Username</label>
+                            <input type="text" id="pUsername" value="${escapeHtml(user.username)}">
+                        </div>
+                        <div class="input-group">
+                            <label for="pBio">Bio</label>
+                            <textarea id="pBio" rows="3" placeholder="Tell us about yourself...">${escapeHtml(user.bio || '')}</textarea>
+                        </div>
+                        <div class="input-group">
+                            <label for="pCompany">Company</label>
+                            <input type="text" id="pCompany" value="${escapeHtml(user.company || '')}" placeholder="Your company">
+                        </div>
+                        <div class="input-group">
+                            <label for="pAvatar">Avatar URL</label>
+                            <input type="url" id="pAvatar" value="${escapeHtml(user.avatar_url || '')}" placeholder="https://...">
+                        </div>
+
+                        <div style="display:flex;gap:0.75rem;margin-top:1.5rem">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+
+                    <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border-color)">
+                        <p style="font-size:0.8125rem;color:var(--text-muted)">
+                            Member since ${formatDate(user.created_at)}
+                            ${user.last_login ? ` · Last login ${formatRelativeTime(user.last_login)}` : ''}
+                        </p>
+                    </div>
+                `;
+
+                document.getElementById('profileForm').addEventListener('submit', saveProfile);
+            } catch (error) {
+                document.getElementById('profileContent').innerHTML = `
+                    <div class="alert alert-error show">${error.message}</div>
+                `;
+            }
+        }
+
+        async function saveProfile(e) {
+            e.preventDefault();
+            try {
+                await apiRequest('/users/profile', {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        username: document.getElementById('pUsername').value,
+                        bio: document.getElementById('pBio').value,
+                        company: document.getElementById('pCompany').value,
+                        avatar_url: document.getElementById('pAvatar').value
+                    })
+                });
+                showAlert('profileAlert', 'Profile updated successfully!', 'success');
+            } catch (error) {
+                showAlert('profileAlert', error.message, 'error');
+            }
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+
+</html>

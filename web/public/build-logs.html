@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build Log — DeployLite</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <nav class="nav">
+            <a href="/dashboard" class="nav-brand">
+                <svg viewBox="0 0 28 28" fill="none">
+                    <rect width="28" height="28" rx="6" fill="url(#g)" />
+                    <path d="M8 14l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <defs>
+                        <linearGradient id="g" x1="0" y1="0" x2="28" y2="28">
+                            <stop stop-color="#6366f1" />
+                            <stop offset="1" stop-color="#a855f7" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                DeployLite
+            </a>
+            <div class="nav-links">
+                <a href="/dashboard">Dashboard</a>
+                <a href="/profile">Profile</a>
+                <a href="/admin" class="nav-admin-link" style="display:none">Admin</a>
+            </div>
+            <div class="nav-user"></div>
+        </nav>
+
+        <div id="buildContent" class="fade-in">
+            <div class="loading">Loading build log...</div>
+        </div>
+
+        <footer class="footer">
+            <p>© 2024 DeployLite Inc.</p>
+        </footer>
+    </div>
+
+    <script src="/js/common.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const user = await requireAuth();
+            if (!user) return;
+            setupNav(user);
+
+            const params = new URLSearchParams(window.location.search);
+            const buildId = params.get('id');
+
+            if (!buildId) {
+                window.location.href = '/dashboard';
+                return;
+            }
+
+            loadBuildLog(buildId);
+        });
+
+        async function loadBuildLog(buildId) {
+            try {
+                const data = await apiRequest(`/builds/log/${buildId}`);
+                const build = data.build;
+
+                document.title = `Build ${buildId.substring(0, 8)} — DeployLite`;
+
+                const logLines = (build.log_output || 'No log output available').split('\n').map(line => {
+                    if (line.includes('error') || line.includes('ERROR') || line.includes('failed')) {
+                        return `<span class="log-error">${escapeForTerminal(line)}</span>`;
+                    }
+                    if (line.includes('success') || line.includes('✓') || line.includes('completed')) {
+                        return `<span class="log-success">${escapeForTerminal(line)}</span>`;
+                    }
+                    if (line.match(/^\[[\d\-T:.Z ]+\]/)) {
+                        return line.replace(/^(\[[^\]]+\])/, '<span class="log-timestamp">$1</span>');
+                    }
+                    return escapeForTerminal(line);
+                }).join('\n');
+
+                document.getElementById('buildContent').innerHTML = `
+                    <div class="page-header">
+                        <div>
+                            <h1 style="display:flex;align-items:center;gap:0.75rem">
+                                Build Log
+                                ${getStatusBadge(build.status)}
+                            </h1>
+                            <p style="color:var(--text-muted);font-size:0.875rem;margin-top:0.25rem">
+                                ${build.project_name || 'Unknown Project'} · ${build.branch || 'main'} · ${formatDate(build.created_at)}
+                            </p>
+                        </div>
+                        <a href="/project?id=${build.project_id}" class="btn btn-secondary">← Back to Project</a>
+                    </div>
+
+                    <div class="card" style="margin-bottom:1.5rem">
+                        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem">
+                            <div>
+                                <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:0.25rem">Status</div>
+                                ${getStatusBadge(build.status)}
+                            </div>
+                            <div>
+                                <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:0.25rem">Duration</div>
+                                <span style="font-size:0.875rem">${build.duration_ms ? (build.duration_ms / 1000).toFixed(1) + 's' : '—'}</span>
+                            </div>
+                            <div>
+                                <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:0.25rem">Branch</div>
+                                <span style="font-size:0.875rem">${build.branch || 'main'}</span>
+                            </div>
+                            <div>
+                                <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:0.25rem">Commit</div>
+                                <span style="font-size:0.875rem;font-family:'JetBrains Mono',monospace">${build.commit_sha ? build.commit_sha.substring(0, 7) : '—'}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="terminal">
+                        <div class="terminal-header">
+                            <div class="terminal-dot red"></div>
+                            <div class="terminal-dot yellow"></div>
+                            <div class="terminal-dot green"></div>
+                            <div class="terminal-title">Build Output — deploylite-runner</div>
+                        </div>
+                        <div class="terminal-body">
+                            <pre>${logLines}</pre>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                document.getElementById('buildContent').innerHTML = `
+                    <div class="alert alert-error show">${error.message}</div>
+                    <a href="/dashboard" class="btn btn-secondary" style="margin-top:1rem">← Back to Dashboard</a>
+                `;
+            }
+        }
+
+        function escapeForTerminal(str) {
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — DeployLite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <nav class="nav">
+            <a href="/dashboard" class="nav-brand">
+                <svg viewBox="0 0 28 28" fill="none">
+                    <rect width="28" height="28" rx="6" fill="url(#g)" />
+                    <path d="M8 14l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <defs>
+                        <linearGradient id="g" x1="0" y1="0" x2="28" y2="28">
+                            <stop stop-color="#6366f1" />
+                            <stop offset="1" stop-color="#a855f7" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                DeployLite
+            </a>
+            <div class="nav-links">
+                <a href="/dashboard" class="active">Dashboard</a>
+                <a href="/profile">Profile</a>
+                <a href="/admin" class="nav-admin-link" style="display:none">Admin</a>
+            </div>
+            <div class="nav-user"></div>
+        </nav>
+
+        <div class="page-header">
+            <h1>Projects</h1>
+            <button class="btn btn-primary" onclick="openCreateModal()">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="8" y1="2" x2="8" y2="14" />
+                    <line x1="2" y1="8" x2="14" y2="8" />
+                </svg>
+                New Project
+            </button>
+        </div>
+
+        <div class="stat-cards" id="statCards">
+            <div class="card stat-card">
+                <div class="stat-value" id="totalProjects">-</div>
+                <div class="stat-label">Total Projects</div>
+            </div>
+            <div class="card stat-card">
+                <div class="stat-value" id="activeBuilds">-</div>
+                <div class="stat-label">Active Builds</div>
+            </div>
+            <div class="card stat-card">
+                <div class="stat-value" id="successRate">-</div>
+                <div class="stat-label">Success Rate</div>
+            </div>
+            <div class="card stat-card">
+                <div class="stat-value" id="totalDeploys">-</div>
+                <div class="stat-label">Total Deploys</div>
+            </div>
+        </div>
+
+        <div id="projectList" class="dashboard-grid">
+            <div class="loading">Loading projects...</div>
+        </div>
+
+        <!-- Create Project Modal -->
+        <div class="modal-overlay" id="createModal">
+            <div class="modal">
+                <h3>Create New Project</h3>
+                <div id="createAlert" class="alert"></div>
+                <form id="createForm">
+                    <div class="input-group">
+                        <label for="projectName">Project Name</label>
+                        <input type="text" id="projectName" placeholder="my-awesome-app" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="projectDesc">Description</label>
+                        <textarea id="projectDesc" placeholder="Describe your project..." rows="3"></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label for="projectRepo">Repository URL</label>
+                        <input type="url" id="projectRepo" placeholder="https://github.com/you/repo">
+                    </div>
+                    <div class="input-group">
+                        <label for="projectTech">Tech Stack</label>
+                        <input type="text" id="projectTech" placeholder="React, Node.js, PostgreSQL">
+                    </div>
+                    <div class="input-group">
+                        <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer">
+                            <input type="checkbox" id="projectPublic" style="width:auto">
+                            Make this project public
+                        </label>
+                    </div>
+                    <div style="display:flex;gap:0.75rem;justify-content:flex-end;margin-top:1.5rem">
+                        <button type="button" class="btn btn-secondary" onclick="closeCreateModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="createBtn">Create Project</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>© 2024 DeployLite Inc.</p>
+        </footer>
+    </div>
+
+    <script src="/js/common.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+
+</html>

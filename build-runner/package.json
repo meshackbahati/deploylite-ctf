@@ -1,0 +1,17 @@
+{
+    "name": "deploylite-build-runner",
+    "version": "1.0.0",
+    "description": "DeployLite internal build runner service",
+    "main": "src/server.js",
+    "scripts": {
+        "start": "node src/server.js"
+    },
+    "dependencies": {
+        "express": "^4.18.2",
+        "uuid": "^9.0.0",
+        "morgan": "^1.10.0"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    }
+}

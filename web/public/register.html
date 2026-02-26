@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account — DeployLite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <nav class="nav">
+            <a href="/" class="nav-brand">
+                <svg viewBox="0 0 28 28" fill="none">
+                    <rect width="28" height="28" rx="6" fill="url(#g)" />
+                    <path d="M8 14l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <defs>
+                        <linearGradient id="g" x1="0" y1="0" x2="28" y2="28">
+                            <stop stop-color="#6366f1" />
+                            <stop offset="1" stop-color="#a855f7" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                DeployLite
+            </a>
+        </nav>
+
+        <div class="form-card card fade-in">
+            <h2>Create your account</h2>
+            <p class="form-subtitle">Start deploying in under 60 seconds</p>
+
+            <div id="registerAlert" class="alert"></div>
+
+            <form id="registerForm">
+                <div class="input-group">
+                    <label for="email">Email address</label>
+                    <input type="email" id="email" name="email" placeholder="you@company.com" required>
+                </div>
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="johndoe" required minlength="3">
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Min. 8 characters" required
+                        minlength="8">
+                </div>
+                <div class="input-group">
+                    <label for="company">Company <span style="color:var(--text-muted)">(optional)</span></label>
+                    <input type="text" id="company" name="company" placeholder="Acme Corp">
+                </div>
+                <button type="submit" class="btn btn-primary"
+                    style="width:100%;justify-content:center;margin-top:0.5rem" id="registerBtn">
+                    Create Account
+                </button>
+            </form>
+
+            <p style="text-align:center;margin-top:1.5rem;font-size:0.875rem;color:var(--text-muted)">
+                Already have an account? <a href="/login">Sign in</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="/js/common.js"></script>
+    <script src="/js/auth.js"></script>
+</body>
+
+</html>

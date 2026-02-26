@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: deploylite-web
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - POSTGRES_USER=deploylite
+      - POSTGRES_PASSWORD=DL_db_s3cure_2024!
+      - POSTGRES_DB=deploylite
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+      - JWT_SECRET=deploylite_secret_2024
+      - BUILD_RUNNER_URL=http://build-runner:5000
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - frontend
+      - internal
+
+  db:
+    image: postgres:15-alpine
+    container_name: deploylite-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=deploylite
+      - POSTGRES_PASSWORD=DL_db_s3cure_2024!
+      - POSTGRES_DB=deploylite
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U deploylite" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - frontend
+
+  build-runner:
+    build:
+      context: ./build-runner
+      dockerfile: Dockerfile
+    container_name: deploylite-build-runner
+    restart: unless-stopped
+    networks:
+      - internal
+
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: deploylite-nginx
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:4580:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+    depends_on:
+      - web
+    networks:
+      - frontend
+
+volumes:
+  pgdata:
+  certbot-etc:
+  certbot-var:
+
+
+networks:
+  frontend:
+    driver: bridge
+  internal:
+    driver: bridge
+    internal: true
