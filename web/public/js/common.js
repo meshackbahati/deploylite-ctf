@@ -10,6 +10,15 @@ async function apiRequest(path, options = {}) {
 
     try {
         const response = await fetch(url, config);
+        const contentType = response.headers.get('content-type') || '';
+
+        if (!contentType.includes('application/json')) {
+            if (!response.ok) {
+                throw new Error(`Server error (${response.status}). Please try again.`);
+            }
+            throw new Error('Unexpected server response. Please try again.');
+        }
+
         const data = await response.json();
 
         if (!response.ok) {
