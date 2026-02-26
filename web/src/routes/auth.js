@@ -47,8 +47,7 @@ router.post('/register', async (req, res) => {
             id: user.id,
             email: user.email,
             username: user.username,
-            role: user.role,
-            iss: 'deploylite'
+            role: user.role
         });
 
         await pool.query(
@@ -115,8 +114,7 @@ router.post('/login', async (req, res) => {
             id: user.id,
             email: user.email,
             username: user.username,
-            role: user.role,
-            iss: 'deploylite'
+            role: user.role
         });
 
         await pool.query(
