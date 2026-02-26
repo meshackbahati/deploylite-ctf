@@ -7,7 +7,7 @@ echo "  Target: deploylite.g24sec.space"
 echo "================================================"
 echo ""
 
-PROJECT_DIR="/opt/deploylite"
+PROJECT_DIR="/home/admin/deploylite"
 DOMAIN="deploylite.g24sec.space"
 
 if ! command -v docker &> /dev/null; then

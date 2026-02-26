@@ -1,6 +1,6 @@
-const { pool } = require('./config/db');
+const { pool } = require('../config/db');
 const bcrypt = require('bcrypt');
-const { logger } = require('./utils/logger');
+const { logger } = require('./logger');
 
 async function seedDatabase() {
     const client = await pool.connect();
